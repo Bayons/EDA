@@ -7,13 +7,14 @@ public class Ofuscar {
 		FileInputStream fis = null;
 		DataInputStream dis = null;
 		short datos[] = new short[1024];
+		int i;
 
 		try {
 			fis = new FileInputStream("prueba1.mbx");
 			dis = new DataInputStream(fis);
 			
 			//while ((line=br.readLine())!=null)
-			int i = 0;
+			i = 0;
 			while (i!=50){
 				datos[i] = (short) dis.readUnsignedShort();
 				i++;
