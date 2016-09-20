@@ -1,9 +1,36 @@
 import java.io.*;
+import java.util.Scanner;
 
 public class Ofuscar {
 
 	public static void main(String[] args) {
-		
+		int casos;
+		short datos[];
+		Scanner sc = new Scanner(System.in);
+
+		System.out.println("Elija fichero:\n1. prueba1.mbx\n2. prueba2.mbx\n3. prueba3.mbx");
+		casos = sc.nextInt();
+		switch (casos) {
+		case 1:
+			System.out.println("Caso 1");
+			datos = leer("prueba1.mbx");
+			break;
+		case 2:
+			System.out.println("Caso 2");
+			datos = leer("prueba1.mbx");	//cambiar a prueba2 cuando funcione
+			break;
+		case 3:
+			System.out.println("Caso 3");
+			datos = leer("prueba1.mbx");	//cambiar a prueba3 cuando funcione
+			break;
+		default:
+			break;
+		}
+
+		System.out.println("Ha llegau");
+	}
+
+	public static short[] leer(String fichero) {
 		FileInputStream fis = null;
 		DataInputStream dis = null;
 		short datos[] = new short[1024];
@@ -12,30 +39,35 @@ public class Ofuscar {
 		try {
 			fis = new FileInputStream("prueba1.mbx");
 			dis = new DataInputStream(fis);
-			
-			//while ((line=br.readLine())!=null)
+
+			// while ((line=br.readLine())!=null)
 			i = 0;
-			while (i!=50){
-				datos[i] = (short) dis.readUnsignedShort();
+			while (i != 50) {
+				datos[i] = (short) dis.readUnsignedByte();
 				i++;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			
-			try{
-				if (fis!=null){
+
+			try {
+				if (fis != null) {
 					fis.close();
 				}
-				if (dis != null){
+				if (dis != null) {
 					dis.close();
 				}
-			} catch (IOException e){
+			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
 		}
-		
-		System.out.println("Ha llegau");
+
+		// comprobando...
+		for (int j = 0; j < 50; j++) {
+			System.out.println(datos[j]);
+		}
+
+		return datos;
 	}
 
 	public static String ofuscar(short[] datos, short clave) {
@@ -85,13 +117,18 @@ public class Ofuscar {
 		for (int i = 0; i <= datos.length; i++) {
 			w0 = (short) (clave % 256);
 			w1 = (short) (clave / 256);
-			b = datos[i]; b = (short) ((b + w0) % 256);
-			b = vPR[b]; b = (short) ((b + w1) % 256);
-			b = vPS[b]; b = (short) ((b - w1 + 256) % 256);
-			b = vPI[b]; b = (short) ((b - w0 + 256) % 256);
+			b = datos[i];
+			b = (short) ((b + w0) % 256);
+			b = vPR[b];
+			b = (short) ((b + w1) % 256);
+			b = vPS[b];
+			b = (short) ((b - w1 + 256) % 256);
+			b = vPI[b];
+			b = (short) ((b - w0 + 256) % 256);
 			datos[i] = b;
-			clave = (short)((clave + 1) % 65536);
+			clave = (short) ((clave + 1) % 65536);
 		}
+
 		return null;
 	}
 }
