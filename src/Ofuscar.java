@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ofuscar {
@@ -17,15 +18,16 @@ public class Ofuscar {
 			break;
 		case 2:
 			System.out.println("Caso 2");
-			datos = leer("prueba1.mbx");	//cambiar a prueba2 cuando funcione
+			datos = leer("prueba1.mbx"); // cambiar a prueba2 cuando funcione
 			break;
 		case 3:
 			System.out.println("Caso 3");
-			datos = leer("prueba1.mbx");	//cambiar a prueba3 cuando funcione
+			datos = leer("prueba1.mbx"); // cambiar a prueba3 cuando funcione
 			break;
 		default:
 			break;
 		}
+		
 
 		System.out.println("Ha llegau");
 	}
@@ -33,18 +35,15 @@ public class Ofuscar {
 	public static short[] leer(String fichero) {
 		FileInputStream fis = null;
 		DataInputStream dis = null;
-		short datos[] = new short[1024];
-		int i;
+		ArrayList<Integer> lista = new ArrayList<Integer>();
 
 		try {
 			fis = new FileInputStream("prueba1.mbx");
 			dis = new DataInputStream(fis);
-
 			// while ((line=br.readLine())!=null)
-			i = 0;
-			while (i != 50) {
-				datos[i] = (short) dis.readUnsignedByte();
-				i++;
+
+			while (fis.available() != 0/* i != 50 */) {
+				lista.add((int) dis.readUnsignedByte());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -62,16 +61,18 @@ public class Ofuscar {
 			}
 		}
 
-		// comprobando...
-		for (int j = 0; j < 50; j++) {
-			System.out.println(datos[j]);
+		Integer datos[] = new Integer[lista.size()];
+		datos = lista.toArray(datos);
+		short[] datosShort = new short[datos.length];
+		for (int j = 0; j < datos.length; j++) {
+			datosShort[j] = datos[j].shortValue();
+			System.out.println(datosShort[j]);
 		}
 
-		return datos;
+		return datosShort;
 	}
 
-	public static String ofuscar(short[] datos, short clave) {
-		String pila[] = new String[1024];
+	public static void ofuscar(short[] datos, short clave) {
 		short w0;
 		short w1;
 		short b;
@@ -117,18 +118,15 @@ public class Ofuscar {
 		for (int i = 0; i <= datos.length; i++) {
 			w0 = (short) (clave % 256);
 			w1 = (short) (clave / 256);
-			b = datos[i];
-			b = (short) ((b + w0) % 256);
-			b = vPR[b];
-			b = (short) ((b + w1) % 256);
-			b = vPS[b];
-			b = (short) ((b - w1 + 256) % 256);
-			b = vPI[b];
-			b = (short) ((b - w0 + 256) % 256);
+			b = datos[i];	b = (short) ((b + w0) % 256);
+			b = vPR[b];	b = (short) ((b + w1) % 256);
+			b = vPS[b];	b = (short) ((b - w1 + 256) % 256);
+			b = vPI[b];	b = (short) ((b - w0 + 256) % 256);
 			datos[i] = b;
 			clave = (short) ((clave + 1) % 65536);
 		}
-
-		return null;
+		
+		//se pasa la refencia con el metodo
+		
 	}
 }
