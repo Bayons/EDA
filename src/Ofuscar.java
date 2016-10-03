@@ -36,13 +36,13 @@ public class Ofuscar {
 			break;
 		}
 
-		for (short i = 0; i <= 65535; i++) {
-			System.out.println(i);
+		for (int i = 0; i <= 65535; i++) {
 			copia = datos.clone();
-			ofuscar(copia, /* (short) 22769 */i);
+			ofuscar(copia, i);
+			if (i == 65535)
+				toCharList(copia);
 		}
-
-		System.out.println("Ha llegau");
+		System.out.println("Fin");
 	}
 
 	public static short[] leer(String fichero) {
@@ -84,10 +84,19 @@ public class Ofuscar {
 		return datosShort;
 	}
 
-	public static void ofuscar(short[] datos, short clave) {
-		int w0;
-		int w1;
-		int b;
+	public static int[] toIntList(short[] inicial) {
+		int[] transformado = new int[inicial.length];
+
+		for (int i = 0; i < inicial.length; i++) {
+			transformado[i] = inicial[i];
+		}
+		return transformado;
+	}
+
+	public static void ofuscar(short[] datos, int clave) {
+		int w0, w1, b;
+		int[] lista = toIntList(datos);
+
 		final int vPR[] = { 65, 54, 19, 98, 168, 33, 110, 187, 244, 22, 204, 4, 127, 100, 232, 93, 30, 242, 203, 42,
 				116, 197, 94, 53, 210, 149, 71, 158, 150, 45, 154, 136, 76, 125, 132, 63, 219, 172, 49, 182, 72, 95,
 				246, 196, 216, 57, 139, 231, 35, 59, 56, 142, 200, 193, 223, 37, 177, 32, 165, 70, 96, 78, 156, 251,
@@ -127,19 +136,35 @@ public class Ofuscar {
 				250, 241, 90, 239, 207, 144, 182, 139, 181, 189, 192, 191, 8, 151, 30, 108, 226, 97, 224, 198, 193, 89,
 				171, 187, 88, 222, 95, 223, 96, 121, 126, 178, 138 };
 
-		for (int i = 0; i < (datos.length); i++) {
+		for (int i = 0; i < (lista.length); i++) {
 			w0 = (clave % 256);
 			w1 = (clave / 256);
-			b = datos[i];
+			b = lista[i];
 			b = ((b + w0) % 256);
 			b = vPR[b];
 			b = ((b + w1) % 256);
-			b = vPS[b];			//Intenta acceder a la posicion -3 del vector
+			if (b < 0 || b > 255)
+				System.out.println(b);
+			b = vPS[b];
 			b = ((b - w1 + 256) % 256);
 			b = vPI[b];
 			b = ((b - w0 + 256) % 256);
-			datos[i] = (short) b;
-			clave = (short) ((clave + 1) % 65536);
+			lista[i] = b;
+			clave = ((clave + 1) % 65536);
+		}
+		for (int i = 0; i < lista.length; i++) {
+			datos[i] = (short) lista[i];
+		}
+
+	}
+
+	public static void toCharList(short[] datos) {
+		char[] letras = new char[datos.length];
+		String mensaje;
+
+		for (int i = 0; i < datos.length; i++) {
+			letras[i] = (char) datos[i];
+			System.out.println(letras[i]);
 		}
 	}
 }
