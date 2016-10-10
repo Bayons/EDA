@@ -1,3 +1,9 @@
+
+/*
+ * Alejandro Martínez Andrés
+ * Miguel Bayón Sanz
+ */
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -7,7 +13,9 @@ public class Ofuscar {
 	public static void main(String[] args) {
 		short[] datos = null;
 		short[] copia = null;
+		String cadena;
 		Scanner sc = new Scanner(System.in);
+		int posicion;
 
 		System.out.println(
 				"Elija fichero:\n1. prueba1.mbx\n2. prueba2.mbx\n3. prueba3.mbx\n4. prueba4.mbx\n5. prueba5.mbx");
@@ -39,8 +47,12 @@ public class Ofuscar {
 		for (int i = 0; i <= 65535; i++) {
 			copia = datos.clone();
 			ofuscar(copia, i);
-			if (i == 65535)
-				toCharList(copia);
+			cadena = aString(copia);
+			if ((posicion = buscar(cadena)) != -1) {
+				System.out.println(posicion);
+				System.out.println(cadena.substring(posicion - 20, posicion + 20));
+
+			}
 		}
 		System.out.println("Fin");
 	}
@@ -91,6 +103,22 @@ public class Ofuscar {
 			transformado[i] = inicial[i];
 		}
 		return transformado;
+	}
+
+	public static int buscar(String mensaje) {
+		String clave = "evil.corp@mad.org", fragmento;
+		short[] letras = new short[clave.length()];
+		for (int j = 0; j < clave.length(); j++) {
+			letras[j] = (short) clave.charAt(j);
+		}
+//hay que buscar en formato short
+		for (int i = 0; i < (mensaje.length() - clave.length()); i++) {
+			fragmento = mensaje.substring(i, i + clave.length());
+			if (fragmento.equals(clave)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	public static void ofuscar(short[] datos, int clave) {
@@ -158,13 +186,14 @@ public class Ofuscar {
 
 	}
 
-	public static void toCharList(short[] datos) {
+	public static String aString(short[] datos) {
 		char[] letras = new char[datos.length];
 		String mensaje;
 
 		for (int i = 0; i < datos.length; i++) {
 			letras[i] = (char) datos[i];
-			System.out.println(letras[i]);
 		}
+		mensaje = new String(letras);
+		return mensaje;
 	}
 }
