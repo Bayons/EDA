@@ -11,9 +11,8 @@ import java.util.Scanner;
 public class Ofuscar {
 
 	public static void main(String[] args) {
-		short[] datos = null;
-		short[] copia = null;
-		String cadena;
+		short[] datos = null, copia = null;
+		String cadena = null;
 		Scanner sc = new Scanner(System.in);
 		int posicion;
 
@@ -47,16 +46,26 @@ public class Ofuscar {
 		for (int i = 0; i <= 65535; i++) {
 			copia = datos.clone();
 			ofuscar(copia, i);
-			cadena = aString(copia);
-			if ((posicion = buscar(cadena)) != -1) {
+			// cadena = aString(copia);
+			if ((posicion = buscar(copia)) != -1) {
 				System.out.println(posicion);
-				System.out.println(cadena.substring(posicion - 20, posicion + 20));
+				imprimeShorts(copia, posicion);
+				/*cadena = aString(copia);
+				System.out.println(cadena.substring(posicion - 40, posicion + 20));*/
 
 			}
 		}
-		System.out.println("Fin");
+		System.out.println("\nFin");
 	}
 
+	/**
+	 * Lee un fichero binario
+	 * 
+	 * @param fichero
+	 *            String con el nombre del fichero ubicado en la carpeta del
+	 *            mismo proyecto
+	 * @return short[] en el que se ha transformado al fichero
+	 */
 	public static short[] leer(String fichero) {
 		FileInputStream fis = null;
 		DataInputStream dis = null;
@@ -96,25 +105,45 @@ public class Ofuscar {
 		return datosShort;
 	}
 
-	public static int[] toIntList(short[] inicial) {
-		int[] transformado = new int[inicial.length];
-
-		for (int i = 0; i < inicial.length; i++) {
-			transformado[i] = inicial[i];
+	/**
+	 * Compara dos vectores de shorts del mismo tamaño
+	 * 
+	 * @param mensaje
+	 *            vector de shorts a comparar
+	 * @param clave
+	 *            vector de shorts a comparar
+	 * @return true si son iguales
+	 */
+	public static boolean comparar(short[] mensaje, short[] clave) {
+		for (int i = 0; i < mensaje.length; i++) {
+			if (mensaje[i] != clave[i])
+				return false;
 		}
-		return transformado;
+		return true;
 	}
 
-	public static int buscar(String mensaje) {
-		String clave = "evil.corp@mad.org", fragmento;
-		short[] letras = new short[clave.length()];
-		for (int j = 0; j < clave.length(); j++) {
-			letras[j] = (short) clave.charAt(j);
+	/**
+	 * Busca en un mensaje cifrado si existe la cadena evil.corp@mad.org
+	 * 
+	 * @param mensaje
+	 *            cadena de short donde queremos buscar
+	 * @return entero con la posicion de la cadena buscada
+	 */
+	public static int buscar(short[] mensaje) {
+		char[] letras = "evil.corp@mad.org".toCharArray();
+		short[] clave = new short[letras.length], comparador = new short[clave.length];
+
+		// convertimos la clave en vector de shorts
+		for (int cont = 0; cont < clave.length; cont++) {
+			clave[cont] = (short) letras[cont];
 		}
-//hay que buscar en formato short
-		for (int i = 0; i < (mensaje.length() - clave.length()); i++) {
-			fragmento = mensaje.substring(i, i + clave.length());
-			if (fragmento.equals(clave)) {
+
+		for (int i = 0; i < (mensaje.length - clave.length); i++) {
+			for (int j = 0; (j + i) < (i + clave.length); j++) {
+				comparador[j] = mensaje[j + i];
+			}
+
+			if (comparar(comparador, clave)) {
 				return i;
 			}
 		}
@@ -186,6 +215,13 @@ public class Ofuscar {
 
 	}
 
+	/**
+	 * Transforma un vector de shorts en un String
+	 * 
+	 * @param datos
+	 *            vector de shorts a transformar
+	 * @return String con el vector de shorts transformado
+	 */
 	public static String aString(short[] datos) {
 		char[] letras = new char[datos.length];
 		String mensaje;
@@ -195,5 +231,37 @@ public class Ofuscar {
 		}
 		mensaje = new String(letras);
 		return mensaje;
+	}
+
+	/**
+	 * Transforma un vector de shorts en un vector de int
+	 * 
+	 * @param inicial
+	 *            short[] a transformar
+	 * @return int[] con el vector transformado
+	 */
+	public static int[] toIntList(short[] inicial) {
+		int[] transformado = new int[inicial.length];
+
+		for (int i = 0; i < inicial.length; i++) {
+			transformado[i] = inicial[i];
+		}
+		return transformado;
+	}
+
+	/**
+	 * Imprime 580 posiciones del vector de shorts dado transformados en char
+	 * 
+	 * @param datos
+	 *            vector de shorts a imprimir
+	 * @param posicion
+	 *            int con la posicion de referencia
+	 */
+	public static void imprimeShorts(short[] datos, int posicion) {
+		for (int i = (posicion - 90); i < (posicion + 490); i++){
+			System.out.print(((char) datos[i]));
+			System.out.flush();
+		}
+		System.out.println();
 	}
 }
