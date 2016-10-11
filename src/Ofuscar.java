@@ -12,7 +12,6 @@ public class Ofuscar {
 
 	public static void main(String[] args) {
 		short[] datos = null, copia = null;
-		String cadena = null;
 		Scanner sc = new Scanner(System.in);
 		int posicion;
 
