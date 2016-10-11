@@ -46,13 +46,9 @@ public class Ofuscar {
 		for (int i = 0; i <= 65535; i++) {
 			copia = datos.clone();
 			ofuscar(copia, i);
-			// cadena = aString(copia);
 			if ((posicion = buscar(copia)) != -1) {
 				System.out.println(posicion);
-				imprimeShorts(copia, posicion);
-				/*cadena = aString(copia);
-				System.out.println(cadena.substring(posicion - 40, posicion + 20));*/
-
+				System.out.println(vec2str(copia, posicion-95, posicion+500));
 			}
 		}
 		System.out.println("\nFin");
@@ -150,6 +146,11 @@ public class Ofuscar {
 		return -1;
 	}
 
+	/**
+	 * Codifica un vector de short de manera iterativa
+	 * @param datos vector de short a codificar
+	 * @param clave entero con la clave usada para codificar
+	 */
 	public static void ofuscar(short[] datos, int clave) {
 		int w0, w1, b;
 		int[] lista = toIntList(datos);
@@ -216,21 +217,19 @@ public class Ofuscar {
 	}
 
 	/**
-	 * Transforma un vector de shorts en un String
-	 * 
-	 * @param datos
-	 *            vector de shorts a transformar
-	 * @return String con el vector de shorts transformado
+	 * Transforma un vector de short en un String
+	 * @author César Vaca
+	 * @param vec Vector de short a transformar
+	 * @param ini Entero con el número a partir del cual se transformará
+	 * @param fin Entero con el número hasta el que se transformará
+	 * @return String transformado desde el vector de short
 	 */
-	public static String aString(short[] datos) {
-		char[] letras = new char[datos.length];
-		String mensaje;
-
-		for (int i = 0; i < datos.length; i++) {
-			letras[i] = (char) datos[i];
+	static String vec2str(short[] vec, int ini, int fin) {
+		StringBuilder res = new StringBuilder(fin - ini);
+		for (int i = ini; i < fin; i++) {
+			res.append((char) (vec[i] == 13 ? 10 : vec[i]));
 		}
-		mensaje = new String(letras);
-		return mensaje;
+		return res.toString();
 	}
 
 	/**
@@ -247,21 +246,5 @@ public class Ofuscar {
 			transformado[i] = inicial[i];
 		}
 		return transformado;
-	}
-
-	/**
-	 * Imprime 580 posiciones del vector de shorts dado transformados en char
-	 * 
-	 * @param datos
-	 *            vector de shorts a imprimir
-	 * @param posicion
-	 *            int con la posicion de referencia
-	 */
-	public static void imprimeShorts(short[] datos, int posicion) {
-		for (int i = (posicion - 90); i < (posicion + 490); i++){
-			System.out.print(((char) datos[i]));
-			System.out.flush();
-		}
-		System.out.println();
 	}
 }
