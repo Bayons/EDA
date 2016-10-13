@@ -8,7 +8,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Ofuscar {
+public class Practica1 {
 
 	public static void main(String[] args) {
 		short[] datos = null, copia = null;
@@ -46,8 +46,8 @@ public class Ofuscar {
 			copia = datos.clone();
 			ofuscar(copia, i);
 			if ((posicion = buscar(copia)) != -1) {
-				System.out.println(posicion);
-				System.out.println(vec2str(copia, posicion-95, posicion+500));
+				System.out.println("**** Posición: "+posicion+" || Clave: "+i+" ****");
+				System.out.println(vec2str(copia, posicion - 95, posicion + 500));
 			}
 		}
 		System.out.println("\nFin");
@@ -147,8 +147,11 @@ public class Ofuscar {
 
 	/**
 	 * Codifica un vector de short de manera iterativa
-	 * @param datos vector de short a codificar
-	 * @param clave entero con la clave usada para codificar
+	 * 
+	 * @param datos
+	 *            vector de short a codificar
+	 * @param clave
+	 *            entero con la clave usada para codificar
 	 */
 	public static void ofuscar(short[] datos, int clave) {
 		int w0, w1, b;
@@ -217,10 +220,14 @@ public class Ofuscar {
 
 	/**
 	 * Transforma un vector de short en un String
+	 * 
 	 * @author César Vaca
-	 * @param vec Vector de short a transformar
-	 * @param ini Entero con el número a partir del cual se transformará
-	 * @param fin Entero con el número hasta el que se transformará
+	 * @param vec
+	 *            Vector de short a transformar
+	 * @param ini
+	 *            Entero con el número a partir del cual se transformará
+	 * @param fin
+	 *            Entero con el número hasta el que se transformará
 	 * @return String transformado desde el vector de short
 	 */
 	static String vec2str(short[] vec, int ini, int fin) {
