@@ -11,43 +11,26 @@ import java.util.Scanner;
 public class Practica1 {
 
 	public static void main(String[] args) {
-		short[] datos = null, copia = null;
+		short[] datos = null, copia = null, trozo = new short[600];
 		Scanner sc = new Scanner(System.in);
 		int posicion;
 
-		System.out.println(
-				"Elija fichero:\n1. prueba1.mbx\n2. prueba2.mbx\n3. prueba3.mbx\n4. prueba4.mbx\n5. prueba5.mbx");
-		switch (sc.nextInt()) {
-		case 1:
-			System.out.println("Caso 1");
-			datos = leer("prueba1.mbx");
-			break;
-		case 2:
-			System.out.println("Caso 2");
-			datos = leer("prueba2.mbx");
-			break;
-		case 3:
-			System.out.println("Caso 3");
-			datos = leer("prueba3.mbx");
-			break;
-		case 4:
-			System.out.println("Caso 4");
-			datos = leer("prueba4.mbx");
-			break;
-		case 5:
-			System.out.println("Caso 5");
-			datos = leer("prueba5.mbx");
-			break;
-		default:
-			break;
+		char[] letras = "evil.corp".toCharArray();
+		short[] clave = new short[letras.length];
+		for (int k = 0; k<letras.length; k++){
+			clave[k]=(short)letras[k];
 		}
 
+		short[] mensaje = leer("examen3.mbx");
+		
 		for (int i = 0; i <= 65535; i++) {
-			copia = datos.clone();
+			copia = clave.clone();
 			ofuscar(copia, i);
-			if ((posicion = buscar(copia)) != -1) {
-				System.out.println("**** Posición: "+posicion+" || Clave: "+i+" ****");
-				System.out.println(vec2str(copia, posicion - 95, posicion + 500));
+			if ((posicion = buscar(copia, mensaje)) != -1) {
+				trozo = creaTrozo (mensaje, posicion);
+				ofuscar(trozo, i-95);
+				System.out.println("**** Posición: " + posicion + " || Clave: " + i + " ****");
+				System.out.println(vec2str(trozo, 0, trozo.length));
 			}
 		}
 		System.out.println("\nFin");
@@ -100,6 +83,14 @@ public class Practica1 {
 		return datosShort;
 	}
 
+	public static short[] creaTrozo(short[] mensaje, int posicion){
+		short [] trozo = new short [595];
+		for (int i = 0; i < trozo.length; i++){
+			trozo [i] = mensaje[i+posicion-95];
+		}
+		return trozo;
+	}
+	
 	/**
 	 * Compara dos vectores de shorts del mismo tamaño
 	 * 
@@ -116,7 +107,7 @@ public class Practica1 {
 		}
 		return true;
 	}
-
+	
 	/**
 	 * Busca en un mensaje cifrado si existe la cadena evil.corp@mad.org
 	 * 
@@ -124,14 +115,8 @@ public class Practica1 {
 	 *            cadena de short donde queremos buscar
 	 * @return entero con la posicion de la cadena buscada
 	 */
-	public static int buscar(short[] mensaje) {
-		char[] letras = "evil.corp@mad.org".toCharArray();
-		short[] clave = new short[letras.length], comparador = new short[clave.length];
-
-		// convertimos la clave en vector de shorts
-		for (int cont = 0; cont < clave.length; cont++) {
-			clave[cont] = (short) letras[cont];
-		}
+	public static int buscar(short[] clave, short[] mensaje) {
+		short[] comparador = new short[clave.length];
 
 		for (int i = 0; i < (mensaje.length - clave.length); i++) {
 			for (int j = 0; (j + i) < (i + clave.length); j++) {
