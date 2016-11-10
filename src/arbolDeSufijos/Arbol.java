@@ -2,29 +2,50 @@ package arbolDeSufijos;
 
 import java.util.ArrayList;
 
+/**
+ * @author Miguel Bayón Sanz
+ * @author Alejandro Martínez Andrés
+ */
 public class Arbol {
 
-	Nodo root;
+	private Nodo root;
 
 	/**
-	 * Genera un arbol cuyos nodos son las letras de las palabras añadidas
+	 * Genera un arbol vacio cuyos nodos seran las letras de las palabras
+	 * añadidas
 	 */
 	public Arbol() {
 		root = new Nodo();
 	}
 
+	/**
+	 * Introduce una palabra en el arbol sin repetir los nodos existentes
+	 * 
+	 * @param palabra
+	 *            Short[] con la palabra nueva a introducir
+	 * @param clave
+	 *            int con la clave de la palabra
+	 */
 	public void addPalabra(short[] palabra, int clave) {
 		Nodo nodo = root;
 		for (int i = 0; i < palabra.length; i++) {
 			if (nodo.getHijoPorLetra(palabra[i]) == null) {
-				nodo.addHijo(new Nodo(palabra[i]));
-				nodo = nodo.getHijoPorLetra(palabra[i]);
 
-				if (i == palabra.length - 1)
-					nodo.setClave(clave);
+				nodo.addHijo(new Nodo(palabra[i])); // Creamos el hijo
+				nodo.getHijoPorLetra(palabra[i]).setPadre(nodo);// Le damos
+																// padre
+				nodo = nodo.getHijoPorLetra(palabra[i]); // Seleccionamos al
+															// hijo
+				
+				if (i == palabra.length - 1) // Si es la ultima letra le damos
+					nodo.setClave(clave); // clave
 			} else
 				nodo = nodo.getHijoPorLetra(palabra[i]);
 		}
+	}
+	
+	public Nodo getRoot(){
+		return root;
 	}
 
 	/**
@@ -44,6 +65,9 @@ public class Arbol {
 		return nodo.getClave();
 	}
 
+	/**
+	 * Lista, nodo a nodo, el arbol completo en preorden
+	 */
 	public void recorreRamas() {
 		recorre(root);
 	}
@@ -59,6 +83,10 @@ public class Arbol {
 		}
 	}
 
+	/**
+	 * Lista las palabras existentes tomando como referencia la raiz y cada hoja
+	 * existente
+	 */
 	public void imprimePalabras() {
 		ArrayList<Integer> letras = new ArrayList<Integer>();
 		imprime(root, letras);

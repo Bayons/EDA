@@ -4,18 +4,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import arbolDeSufijos.Arbol;
+
 public class Practica2 {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		char[] busq_Char = "evil.corp".toCharArray();
-		short[] busq = new short[busq_Char.length], trozo;
-		ArrayList<short[]> busq_ofus;
+		char[] busqChar = "evil.corp".toCharArray();
+		short[] busq = new short[busqChar.length], trozo;
 		int posicion;
+		//Arbol busqueda = new Arbol();
+		ArrayList<short[]> busq_ofus;
 
-		for (int i = 0; i < busq_Char.length; i++)
-			busq[i] = (short) busq_Char[i];
+		for (int i = 0; i < busqChar.length; i++)
+			busq[i] = (short) busqChar[i];
 
+		System.out.println("Introduzca el nombre del fichero a leer");
 		short[] mensaje = leer(sc.nextLine());
 		busq_ofus = creaBusqOfus(busq);
 		
