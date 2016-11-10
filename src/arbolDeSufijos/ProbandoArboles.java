@@ -4,7 +4,7 @@ public class ProbandoArboles {
 
 	public static void main(String[] args) {
 		Arbol arbol = new Arbol();
-		char[] uno = "evil.corp".toCharArray();//RECORRE LAS RAMAS GENIAL
+		char[] uno = "evil.corp".toCharArray();//RECORRE Y CREA LAS RAMAS GENIAL
 		char[] dos = "evil.cors".toCharArray();
 		char[] tre = "evil.carn".toCharArray();
 		char[] cua = "evilkepas".toCharArray();
@@ -15,12 +15,18 @@ public class ProbandoArboles {
 		arbol.addPalabra(toShortArray(dos), 234);
 		arbol.addPalabra(toShortArray(tre), 345);
 		arbol.addPalabra(toShortArray(cua), 456);
-		arbol.addPalabra(toShortArray(cin), 678);
-		arbol.addPalabra(toShortArray(sei), 789);
+		arbol.addPalabra(toShortArray(cin), 567);
+		arbol.addPalabra(toShortArray(sei), 678);
 		
 		arbol.imprimePalabras();
 		System.out.println("\n\n");
 		arbol.recorreRamas();
+		
+		System.out.println(arbol.buscaPalabra(toShortArray(cin)));
+		cin = "eviterason".toCharArray();
+		System.out.println(arbol.buscaPalabra(toShortArray(cin)));
+		cin = "evil.cora".toCharArray();
+		System.out.println(arbol.buscaPalabra(toShortArray(cin)));
 
 	}
 	

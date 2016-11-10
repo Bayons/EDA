@@ -66,6 +66,11 @@ public class Nodo {
 		return clave;
 	}
 	
+	/**
+	 * Devuelve el Nodo hijo que contenga la letra especificada 
+	 * @param letra Short con el valor de la letra buscada
+	 * @return	Nodo hijo con la letra buscada o null si no existe ese hijo
+	 */
 	public Nodo getHijoPorLetra(short letra){
 		for (int i = 0; i < hijos.size(); i++){
 			if (hijos.get(i).getLetra()==letra)

@@ -15,7 +15,7 @@ public class Practica1 {
 		Scanner sc = new Scanner(System.in);
 		int posicion;
 
-		char[] letras = "evil.corp".toCharArray();
+		char[] letras = "mad.org".toCharArray();
 		short[] clave = new short[letras.length];
 		for (int k = 0; k<letras.length; k++){
 			clave[k]=(short)letras[k];
