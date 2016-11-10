@@ -10,10 +10,11 @@ public class Practica2 {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		char[] busqChar = "evil.corp".toCharArray();
+		char[] busqChar = "evil.corp@mad.org".toCharArray();
 		short[] busq = new short[busqChar.length], copia = new short[busq.length], trozo;
 		int clave;
 		Arbol busqueda = new Arbol();
+		
 		for (int i = 0; i < busqChar.length; i++)
 			busq[i] = (short) busqChar[i];
 
