@@ -11,37 +11,36 @@ public class Practica2 {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		char[] busqChar = "evil.corp".toCharArray();
-		short[] busq = new short[busqChar.length], trozo;
-		int posicion;
-		//Arbol busqueda = new Arbol();
-		ArrayList<short[]> busq_ofus;
-
+		short[] busq = new short[busqChar.length], copia = new short[busq.length], trozo;
+		int clave;
+		Arbol busqueda = new Arbol();
 		for (int i = 0; i < busqChar.length; i++)
 			busq[i] = (short) busqChar[i];
 
 		System.out.println("Introduzca el nombre del fichero a leer");
 		short[] mensaje = leer(sc.nextLine());
-		busq_ofus = creaBusqOfus(busq);
+		busqueda = creaBusqueda(busq);
 		
-		for(int i = 0; i < 65535; i++){
-			if((posicion=buscar(busq_ofus.get(i), mensaje))!=-1){
-				trozo=creaTrozo(mensaje, posicion);
-				ofuscar(trozo, i-95);
+		for (int i = 0; i < mensaje.length-busq.length; i++){
+			for (int j = 0; j < busq.length; j++)
+				copia[j]=mensaje[i+j];
+			if((clave=busqueda.buscaPalabra(copia))!=-1){
+				trozo=creaTrozo(mensaje, i);
+				ofuscar(trozo, clave-95);
 				System.out.println(vec2str(trozo, 0, trozo.length));
 			}
 		}
-
 	}
 	
-	public static ArrayList<short[]> creaBusqOfus(short[] busq) {
-		ArrayList<short[]> busq_ofus = new ArrayList<short[]>();
+	public static Arbol creaBusqueda(short[] busq) {
+		Arbol arbol = new Arbol();
 		short[] copia;
 		for (int i = 0; i<65535; i++){
 			copia = busq.clone();
 			ofuscar(copia, i);
-			busq_ofus.add(copia);
+			arbol.addPalabra(copia, i);
 		}
-		return busq_ofus;
+		return arbol;
 	}
 
 	static String vec2str(short[] vec, int ini, int fin) {
@@ -50,29 +49,6 @@ public class Practica2 {
 			res.append((char) (vec[i] == 13 ? 10 : vec[i]));
 		}
 		return res.toString();
-	}
-
-	public static int buscar(short[] clave, short[] mensaje) {
-		short[] comparador = new short[clave.length];
-
-		for (int i = 0; i < (mensaje.length - clave.length); i++) {
-			for (int j = 0; (j + i) < (i + clave.length); j++) {
-				comparador[j] = mensaje[j + i];
-			}
-
-			if (comparar(comparador, clave)) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	public static boolean comparar(short[] mensaje, short[] clave) {
-		for (int i = 0; i < mensaje.length; i++) {
-			if (mensaje[i] != clave[i])
-				return false;
-		}
-		return true;
 	}
 
 	public static short[] leer(String fichero) {

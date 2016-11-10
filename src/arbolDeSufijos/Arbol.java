@@ -44,6 +44,10 @@ public class Arbol {
 		}
 	}
 	
+	/**
+	 * Getter del atributo root
+	 * @return Nodo con la raiz del arbol
+	 */
 	public Nodo getRoot(){
 		return root;
 	}

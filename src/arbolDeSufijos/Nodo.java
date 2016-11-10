@@ -62,7 +62,7 @@ public class Nodo {
 	}
 
 	/**
-	 * Setter del parametro padre
+	 * Setter del atributo padre
 	 * 
 	 * @param padre
 	 *            Nodo con los valores del nodo padre
@@ -72,7 +72,7 @@ public class Nodo {
 	}
 
 	/**
-	 * Setter del parametro hijos
+	 * Setter del atributo hijos
 	 * 
 	 * @param hijos
 	 *            ArrayList con los nodos que se estableceran como hijos
@@ -82,7 +82,7 @@ public class Nodo {
 	}
 
 	/**
-	 * Setter del parametro letra
+	 * Setter del atributo letra
 	 * 
 	 * @param letra
 	 *            short con la letra a establecer en el nodo
@@ -92,7 +92,7 @@ public class Nodo {
 	}
 
 	/**
-	 * Setter del parametro clave
+	 * Setter del atributo clave
 	 * 
 	 * @param clave
 	 *            int con la clave de la palabra
@@ -102,7 +102,7 @@ public class Nodo {
 	}
 
 	/**
-	 * Getter del parametro clave
+	 * Getter del atributo clave
 	 * 
 	 * @return Nodo padre si existe, null si no existe
 	 */
@@ -111,7 +111,7 @@ public class Nodo {
 	}
 
 	/**
-	 * Getter del parametro hijos
+	 * Getter del atributo hijos
 	 * 
 	 * @return ArrayList con los nodos hijo
 	 */
@@ -120,7 +120,7 @@ public class Nodo {
 	}
 
 	/**
-	 * Getter del parametro letra
+	 * Getter del atributo letra
 	 * 
 	 * @return short con el valor numerico de la letra del nodo
 	 */
@@ -129,7 +129,7 @@ public class Nodo {
 	}
 
 	/**
-	 * Getter del parametro clave
+	 * Getter del atributo clave
 	 * 
 	 * @return int con la clave de la palabra
 	 */
