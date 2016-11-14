@@ -8,29 +8,38 @@ import arbolDeSufijos.Arbol;
 
 public class Practica2 {
 
+	//Error por posicion o caracteres?
+	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		char[] busqChar = "evil.corp@mad.org".toCharArray();
 		short[] busq = new short[busqChar.length], copia = new short[busq.length], trozo;
 		int clave;
-		Arbol busqueda = new Arbol();
+		double tIni=0, tEnd=0;
+		Arbol arbol = new Arbol();
 		
 		for (int i = 0; i < busqChar.length; i++)
 			busq[i] = (short) busqChar[i];
 
 		System.out.println("Introduzca el nombre del fichero a leer");
 		short[] mensaje = leer(sc.nextLine());
-		busqueda = creaBusqueda(busq);
+		tIni= System.nanoTime();
+		
+		arbol = creaBusqueda(busq);
 		
 		for (int i = 0; i < mensaje.length-busq.length; i++){
 			for (int j = 0; j < busq.length; j++)
 				copia[j]=mensaje[i+j];
-			if((clave=busqueda.buscaPalabra(copia))!=-1){
+			if((clave=arbol.buscaPalabra(copia))!=-1){
+				System.out.println("*** Posicion: = "+i+", Clave: "+clave+" ***");
 				trozo=creaTrozo(mensaje, i);
 				ofuscar(trozo, clave-95);
 				System.out.println(vec2str(trozo, 0, trozo.length));
 			}
 		}
+		
+		tEnd = System.nanoTime();
+		System.out.println("\n\nTiempo total: "+((tEnd-tIni)/1000000000));
 	}
 	
 	public static Arbol creaBusqueda(short[] busq) {
@@ -165,7 +174,7 @@ public class Practica2 {
 		return transformado;
 	}
 
-	public static short[] creaTrozo(short[] mensaje, int posicion){
+	public static short[] creaTrozo(short[] mensaje, int posicion){		
 		short [] trozo = new short [595];
 		for (int i = 0; i < trozo.length; i++){
 			trozo [i] = mensaje[i+posicion-95];
