@@ -1,49 +1,66 @@
-
-/*
- * Alejandro Martínez Andrés
- * Miguel Bayón Sanz
- */
-
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Practica1 {
+import arbolDeSufijos.Arbol;
 
+public class Practica2 {
+
+	//Error por posicion o caracteres?
+	
 	public static void main(String[] args) {
-		short[] datos = null, copia = null, trozo = new short[600];
 		Scanner sc = new Scanner(System.in);
-		int posicion;
-
-		char[] letras = "mad.org".toCharArray();
-		short[] clave = new short[letras.length];
-		for (int k = 0; k<letras.length; k++){
-			clave[k]=(short)letras[k];
-		}
-
-		short[] mensaje = leer("examen3.mbx");
+		char[] busqChar = "evil.corp@mad.org".toCharArray();
+		short[] busq = new short[busqChar.length], copia = new short[busq.length], trozo;
+		int clave;
+		double tIni=0, tEnd=0;
+		Arbol arbol = new Arbol();
 		
-		for (int i = 0; i <= 65535; i++) {
-			copia = clave.clone();
-			ofuscar(copia, i);
-			if ((posicion = buscar(copia, mensaje)) != -1) {
-				trozo = creaTrozo (mensaje, posicion);
-				ofuscar(trozo, i-95);
-				System.out.println("**** Posición: " + posicion + " || Clave: " + i + " ****");
+		for (int i = 0; i < busqChar.length; i++)
+			busq[i] = (short) busqChar[i];
+
+		System.out.println("Introduzca el nombre del fichero a leer");
+		short[] mensaje = leer(sc.nextLine());
+		tIni= System.nanoTime();
+		
+		arbol = creaBusqueda(busq);
+		
+		for (int i = 0; i < mensaje.length-busq.length; i++){
+			for (int j = 0; j < busq.length; j++)
+				copia[j]=mensaje[i+j];
+			if((clave=arbol.buscaPalabra(copia))!=-1){
+				System.out.println("*** Posicion: = "+i+", Clave: "+clave+" ***");
+				trozo=creaTrozo(mensaje, i);
+				ofuscar(trozo, clave-95);
 				System.out.println(vec2str(trozo, 0, trozo.length));
 			}
 		}
-		System.out.println("\nFin");
+		
+		tEnd = System.nanoTime();
+		System.out.println("\n\nTiempo total: "+((tEnd-tIni)/1000000000));
+	}
+	
+	public static Arbol creaBusqueda(short[] busq) {
+		Arbol arbol = new Arbol();
+		short[] copia;
+		for (int i = 0; i<65535; i++){
+			copia = busq.clone();
+			ofuscar(copia, i);
+			arbol.addPalabra(copia, i);
+		}
+		return arbol;
 	}
 
-	/**
-	 * Lee un fichero binario
-	 * 
-	 * @param fichero
-	 *            String con el nombre del fichero ubicado en la carpeta del
-	 *            mismo proyecto
-	 * @return short[] en el que se ha transformado al fichero
-	 */
+	static String vec2str(short[] vec, int ini, int fin) {
+		StringBuilder res = new StringBuilder(fin - ini);
+		for (int i = ini; i < fin; i++) {
+			res.append((char) (vec[i] == 13 ? 10 : vec[i]));
+		}
+		return res.toString();
+	}
+
 	public static short[] leer(String fichero) {
 		FileInputStream fis = null;
 		DataInputStream dis = null;
@@ -83,61 +100,6 @@ public class Practica1 {
 		return datosShort;
 	}
 
-	public static short[] creaTrozo(short[] mensaje, int posicion){
-		short [] trozo = new short [595];
-		for (int i = 0; i < trozo.length; i++){
-			trozo [i] = mensaje[i+posicion-95];
-		}
-		return trozo;
-	}
-	
-	/**
-	 * Compara dos vectores de shorts del mismo tamaño
-	 * 
-	 * @param mensaje
-	 *            vector de shorts a comparar
-	 * @param clave
-	 *            vector de shorts a comparar
-	 * @return true si son iguales
-	 */
-	public static boolean comparar(short[] mensaje, short[] clave) {
-		for (int i = 0; i < mensaje.length; i++) {
-			if (mensaje[i] != clave[i])
-				return false;
-		}
-		return true;
-	}
-	
-	/**
-	 * Busca en un mensaje cifrado si existe la cadena evil.corp@mad.org
-	 * 
-	 * @param mensaje
-	 *            cadena de short donde queremos buscar
-	 * @return entero con la posicion de la cadena buscada
-	 */
-	public static int buscar(short[] clave, short[] mensaje) {
-		short[] comparador = new short[clave.length];
-
-		for (int i = 0; i < (mensaje.length - clave.length); i++) {
-			for (int j = 0; (j + i) < (i + clave.length); j++) {
-				comparador[j] = mensaje[j + i];
-			}
-
-			if (comparar(comparador, clave)) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	/**
-	 * Codifica un vector de short de manera iterativa
-	 * 
-	 * @param datos
-	 *            vector de short a codificar
-	 * @param clave
-	 *            entero con la clave usada para codificar
-	 */
 	public static void ofuscar(short[] datos, int clave) {
 		int w0, w1, b;
 		int[] lista = toIntList(datos);
@@ -203,33 +165,6 @@ public class Practica1 {
 
 	}
 
-	/**
-	 * Transforma un vector de short en un String
-	 * 
-	 * @author César Vaca
-	 * @param vec
-	 *            Vector de short a transformar
-	 * @param ini
-	 *            Entero con el número a partir del cual se transformará
-	 * @param fin
-	 *            Entero con el número hasta el que se transformará
-	 * @return String transformado desde el vector de short
-	 */
-	static String vec2str(short[] vec, int ini, int fin) {
-		StringBuilder res = new StringBuilder(fin - ini);
-		for (int i = ini; i < fin; i++) {
-			res.append((char) (vec[i] == 13 ? 10 : vec[i]));
-		}
-		return res.toString();
-	}
-
-	/**
-	 * Transforma un vector de shorts en un vector de int
-	 * 
-	 * @param inicial
-	 *            short[] a transformar
-	 * @return int[] con el vector transformado
-	 */
 	public static int[] toIntList(short[] inicial) {
 		int[] transformado = new int[inicial.length];
 
@@ -237,5 +172,13 @@ public class Practica1 {
 			transformado[i] = inicial[i];
 		}
 		return transformado;
+	}
+
+	public static short[] creaTrozo(short[] mensaje, int posicion){		
+		short [] trozo = new short [595];
+		for (int i = 0; i < trozo.length; i++){
+			trozo [i] = mensaje[i+posicion-95];
+		}
+		return trozo;
 	}
 }
