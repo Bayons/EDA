@@ -1,0 +1,7 @@
+Error de impresion:
+	Miguel Bayon Sanz
+	Alejandro Martinez Andres
+
+
+Como se puede ver en la pra¡ctica, cuando imprime los mensajes hay un error antes de la primera palabra "De" de los correos, esto se debe a un desfase en el trozo que estamos ofuscando para despues escribirlo. Hemos conseguido corregir ese fallo haciendo unas modificaciones en los "desfases", ajustando asi la longitud del trozo a la necesaria para que el mensaje se imprima correctamente.
+Esta correccion no es otra cosa que : ((clave-100)+65535)mod 65535  y en el metodo creaTrozo() cambiando el vector a un tamaño de 600 y restando al trozo 100 en vez de 95 que había.

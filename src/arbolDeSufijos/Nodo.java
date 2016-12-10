@@ -1,4 +1,6 @@
 package arbolDeSufijos;
+//Alejandro Martinez Andres
+//Miguel Bayon Sanz
 
 import java.util.ArrayList;
 

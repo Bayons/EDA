@@ -1,51 +1,85 @@
+//Alejandro Martinez Andres
+//Miguel Bayon Sanz
+
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Random;
 
 import arbolDeSufijos.Arbol;
 
 public class Practica2 {
 
-	//Error por posicion o caracteres?
-	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		char[] busqChar = "evil.corp@mad.org".toCharArray();
+		char[] busqChar = "extremista".toCharArray();
 		short[] busq = new short[busqChar.length], copia = new short[busq.length], trozo;
 		int clave;
-		double tIni=0, tEnd=0;
+		double tIni = 0, tEnd = 0;
 		Arbol arbol = new Arbol();
-		
+
 		for (int i = 0; i < busqChar.length; i++)
 			busq[i] = (short) busqChar[i];
 
 		System.out.println("Introduzca el nombre del fichero a leer");
-		short[] mensaje = leer(sc.nextLine());
-		tIni= System.nanoTime();
 		
+		//Meter numero hasta que reviente
+		short[] mensaje = leer(sc.nextInt());
+		
+		tIni = System.nanoTime();
+
 		arbol = creaBusqueda(busq);
-		
-		for (int i = 0; i < mensaje.length-busq.length; i++){
+
+		System.out.println("Arbol creado...");
+
+		int desfase;
+		for (int i = 0; i < mensaje.length - busq.length; i++) {
 			for (int j = 0; j < busq.length; j++)
-				copia[j]=mensaje[i+j];
-			if((clave=arbol.buscaPalabra(copia))!=-1){
-				System.out.println("*** Posicion: = "+i+", Clave: "+clave+" ***");
-				trozo=creaTrozo(mensaje, i);
-				ofuscar(trozo, clave-95);
+				copia[j] = mensaje[i + j];
+			if ((clave = arbol.buscaPalabra(copia)) != -1) {
+				System.out.println("*** Posicion: = " + i + ", Clave: " + clave + " ***");
+				trozo = creaTrozo(mensaje, i);
+				desfase = ((clave - 100) + 65535) % 65535;
+				ofuscar(trozo, desfase);
 				System.out.println(vec2str(trozo, 0, trozo.length));
 			}
 		}
-		
+
 		tEnd = System.nanoTime();
-		System.out.println("\n\nTiempo total: "+((tEnd-tIni)/1000000000));
+		System.out.println("\n\nTiempo total: " + ((tEnd - tIni) / 1000000000));
 	}
-	
+
+	public static short[] msg = { 110, 131, 34, 191, 215, 38, 121, 106, 126, 68, 219, 25, 90, 11, 252, 80, 37, 178, 228,
+			87, 62, 48, 234, 79, 61, 170, 198, 201, 192, 79, 118, 119, 248, 61, 157 };
+
+	public static short[] leer(int n) {
+		Random rnd = new Random();
+		short[] vec = new short[600];
+
+		for (int i = 0; i < 600; i++)
+			vec[i] = 32;
+
+		ofuscar(vec, 60000);
+		short[] dat = new short[n];
+		int p = n - 1000;
+		for (int i = 0; i < n; i++) {
+			if (i < p - 100 || i > p + 499) {
+				dat[i] = (short) rnd.nextInt(256);
+			} else if (i < p || i > p + 34) {
+				dat[i] = vec[i - p + 100];
+			} else {
+				dat[i] = msg[i - p];
+			}
+		}
+		return dat;
+	}
+
 	public static Arbol creaBusqueda(short[] busq) {
 		Arbol arbol = new Arbol();
 		short[] copia;
-		for (int i = 0; i<65535; i++){
+		for (int i = 0; i < 65535; i++) {
 			copia = busq.clone();
 			ofuscar(copia, i);
 			arbol.addPalabra(copia, i);
@@ -60,7 +94,7 @@ public class Practica2 {
 		}
 		return res.toString();
 	}
-
+/*
 	public static short[] leer(String fichero) {
 		FileInputStream fis = null;
 		DataInputStream dis = null;
@@ -68,7 +102,7 @@ public class Practica2 {
 		short[] datosShort;
 
 		try {
-			fis = new FileInputStream("prueba1.mbx");
+			fis = new FileInputStream(fichero);
 			dis = new DataInputStream(fis);
 
 			while (fis.available() != 0) {
@@ -99,7 +133,7 @@ public class Practica2 {
 
 		return datosShort;
 	}
-
+*/
 	public static void ofuscar(short[] datos, int clave) {
 		int w0, w1, b;
 		int[] lista = toIntList(datos);
@@ -174,10 +208,10 @@ public class Practica2 {
 		return transformado;
 	}
 
-	public static short[] creaTrozo(short[] mensaje, int posicion){		
-		short [] trozo = new short [595];
-		for (int i = 0; i < trozo.length; i++){
-			trozo [i] = mensaje[i+posicion-95];
+	public static short[] creaTrozo(short[] mensaje, int posicion) {
+		short[] trozo = new short[600];
+		for (int i = 0; i < trozo.length; i++) {
+			trozo[i] = mensaje[i + posicion - 100];
 		}
 		return trozo;
 	}
